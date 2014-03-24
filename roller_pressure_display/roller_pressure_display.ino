@@ -34,15 +34,17 @@ void setup() {
 
 void loop() {
   long newPosition = myEnc.read();
-    // encoder has a 1024 resolution, so we divide to slow it down because we don't need that level of detail
-    pressure = newPosition / 1024.0; 
-
+  newPosition = newPosition / 1024.0; // encoder has a 1024 resolution, so we divide to slow it down because we don't need that level of detail
+  if (newPosition != pressure) {
+    pressure = newPosition;
     // Magical sprintf creates a string for us to send to the s7s.
     //  The %4d option creates a 4-digit integer.
     sprintf(tempString, "%4d", pressure);
   
     // This will output the tempString to the S7S
     s7s.print(tempString);
+    setDecimals(0b00000100);  // Sets digit 3 decimal on
+  }
 }
 
 
