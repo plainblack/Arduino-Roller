@@ -2,7 +2,7 @@
 #include <Encoder.h>
 
 // rotary encoder
-Encoder myEnc(5, 6); // pins
+Encoder myEnc(2, 3); // pins
 
 
 // 7 segment display
@@ -34,17 +34,17 @@ void setup() {
 
 void loop() {
   long newPosition = myEnc.read();
-  newPosition = newPosition / 1024.0; // encoder has a 1024 resolution, so we divide to slow it down because we don't need that level of detail
-  if (newPosition != pressure) {
-    pressure = newPosition;
+
+    // encoder has a 1024 resolution, so we divide to slow it down because we don't need that level of detail
+    long display_number =  newPosition / 1000.0; 
+
     // Magical sprintf creates a string for us to send to the s7s.
     //  The %4d option creates a 4-digit integer.
-    sprintf(tempString, "%4d", pressure);
-  
+    sprintf(tempString, "%4d", display_number);
+    Serial.println(display_number);
+ 
     // This will output the tempString to the S7S
     s7s.print(tempString);
-    setDecimals(0b00000100);  // Sets digit 3 decimal on
-  }
 }
 
 
